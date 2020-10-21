@@ -1,6 +1,7 @@
 class ArticlesController < ApplicationController
     def index
-        render json: Article.recent
+        articles = paginate Article.recent.page(params[:page]).per(params[:per_page])
+        render json: articles
     end
 
     def show
