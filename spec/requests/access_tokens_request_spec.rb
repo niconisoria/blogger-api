@@ -4,27 +4,6 @@ RSpec.describe 'AccessTokens', type: :request do
   describe '#create' do
     let(:create) { '/login' }
 
-    shared_examples_for 'unauthorized_requests' do
-      let(:error) do
-        {
-          'status' => '401',
-          'source' => { 'pointer' => '/code' },
-          'title' => 'Authentication code is invalid',
-          'detail' => 'You must provide a valid code to get a token.'
-        }
-      end
-
-      it 'should return 401 status code' do
-        subject
-        expect(response).to have_http_status(401)
-      end
-
-      it 'should return proper error body' do
-        subject
-        expect(json['errors']).to include(error)
-      end
-    end
-
     context 'when no code provided' do
       subject { post create }
       it_behaves_like 'unauthorized_requests'
@@ -69,6 +48,36 @@ RSpec.describe 'AccessTokens', type: :request do
         expect { subject }.to change { User.count }.by(1)
         user = User.find_by(login: 'JDoo1')
         expect(json_data['attributes']).to eq({ 'token' => user.access_token.token })
+      end
+    end
+  end
+
+  describe '#destroy' do
+    let(:destroy) { '/logout' }
+
+    context 'when no authorization header provided' do
+      subject { delete destroy }
+      it_behaves_like 'forbidden_requests'
+    end
+
+    context 'when invalid authorization header provided' do
+      subject { delete destroy, headers: { 'Authorization' => 'invalid_token' } }
+      it_behaves_like 'forbidden_requests'
+    end
+
+    context 'when valid request' do
+      let(:user) { create :user }
+      let!(:access_token) { user.create_access_token }
+
+      subject { delete destroy, headers: { 'Authorization' => "Bearer #{access_token.token}" } }
+
+      it 'should return 204 status code' do
+        subject
+        expect(response).to have_http_status(:no_content)
+      end
+
+      it 'should remove the proper access token' do
+        expect { subject }.to change { AccessToken.count }.by(-1)
       end
     end
   end

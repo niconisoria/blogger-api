@@ -1,16 +1,18 @@
 class ArticlesController < ApplicationController
-    def index
-        articles = paginate Article.recent.page(params[:page]).per(params[:per_page])
-        render json: articles
-    end
+  skip_before_action :authorize!, only: [:index, :show]
 
-    def show
-        render json: Article.find(params[:id])
-    end
+  def index
+    articles = paginate Article.recent.page(params[:page]).per(params[:per_page])
+    render json: articles
+  end
 
-    private
+  def show
+    render json: Article.find(params[:id])
+  end
 
-    def serializer
-        ArticleSerializer
-    end
+  private
+
+  def serializer
+    ArticleSerializer
+  end
 end
