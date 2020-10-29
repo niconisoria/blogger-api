@@ -11,9 +11,19 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    article = Article.new(article_params)
+    article = current_user.articles.build(article_params)
     article.save!
     render json: article, status: :created
+  rescue StandardError
+    render json: article, status: :unprocessable_entity, error: true
+  end
+
+  def update
+    article = current_user.articles.find(params[:id])
+    article.update!(article_params)
+    render json: article, status: :ok
+  rescue ActiveRecord::RecordNotFound
+    authorization_error
   rescue StandardError
     render json: article, status: :unprocessable_entity, error: true
   end
