@@ -16,19 +16,30 @@ class ErrorSerializer
     end
   end
 
-  def format_relationship_errors
-    @model.class.reflect_on_all_associations.each do |relationship|
-      @model.send(relationship.name).each_with_index do |child, index|
-        errors << child.errors.messages.map do |field, errors|
-          errors.map do |error_message|
-            {
-              source: { pointer: "/data/attributes/#{child.model_name.plural}[#{index}].#{field}" },
-              detail: error_message
-            }
-          end
-        end
+  def check_relationship_error(child)
+    child.errors.messages.map do |field, errors|
+      errors.map do |error_message|
+        {
+          source: { pointer: "/data/attributes/#{child.model_name.plural}[#{index}].#{field}" },
+          detail: error_message
+        }
       end
     end
+  end
+
+  def format_relationship_errors
+    errors = []
+    @model.class.reflect_on_all_associations.each do |relationship|
+      relationship = @model.send(relationship.name)
+      if relationship.respond_to?(:each)
+        relationship.each do |child|
+          errors << check_relationship_error(child)
+        end
+      else
+        errors << check_relationship_error(relationship)
+      end
+    end
+    errors
   end
 
   def serializable_hash
