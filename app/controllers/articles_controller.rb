@@ -28,6 +28,14 @@ class ArticlesController < ApplicationController
     render json: article, status: :unprocessable_entity, error: true
   end
 
+  def destroy
+    article = current_user.articles.find(params[:id])
+    article.destroy
+    head :no_content
+  rescue ActiveRecord::RecordNotFound
+    authorization_error
+  end
+
   private
 
   def article_params
