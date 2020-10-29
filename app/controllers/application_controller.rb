@@ -8,7 +8,11 @@ class ApplicationController < ActionController::API
   private
 
   def render(options={})
-    options[:json] = serializer.new(options[:json]) if (options[:json].is_a?(ApplicationRecord) || options[:json].is_a?(ActiveRecord::Relation)) && respond_to?(:serializer, true)
+    if options[:error]
+      options[:json] = ErrorSerializer.new(options[:json]).serializable_hash.to_json
+    elsif (options[:json].is_a?(ApplicationRecord) || options[:json].is_a?(ActiveRecord::Relation)) && respond_to?(:serializer, true)
+      options[:json] = serializer.new(options[:json])
+    end
     super(options)
   end
 
