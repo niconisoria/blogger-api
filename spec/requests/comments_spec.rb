@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe '/comments', type: :request do
+RSpec.describe 'Comments', type: :request do
   let(:article) { create :article }
 
-  describe 'GET /index' do
+  describe '#index' do
     subject { get article_comments_url(article_id: article.id) }
 
     it 'renders a successful response' do
@@ -47,7 +47,7 @@ RSpec.describe '/comments', type: :request do
     end
   end
 
-  describe 'POST /create' do
+  describe '#create' do
     context 'when not authorized' do
       subject { post article_comments_url(article_id: article.id) }
       it_behaves_like 'forbidden_requests'
