@@ -1,6 +1,6 @@
 # BLOGGER API
 
-Code implementation of the [REST API with Ruby on Rails: The Complete Guide](https://www.udemy.com/course/ruby-on-rails-api-the-complete-guide)
+Own implementation of the [REST API with Ruby on Rails: The Complete Guide](https://www.udemy.com/course/ruby-on-rails-api-the-complete-guide) course.
 
 **Functionality**
   * Standard Authentication
