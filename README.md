@@ -1,24 +1,20 @@
-# README
+# BLOGGER API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Code implementation of the [REST API with Ruby on Rails: The Complete Guide](https://www.udemy.com/course/ruby-on-rails-api-the-complete-guide)
 
-Things you may want to cover:
+**Functionality**
+  * Standard Authentication
+  * Oauth Authentication
+  * CRUD Articles
+  * CRUD Comments
+  * Test Coverage
 
-* Ruby version
+**Technologies**
+  * Rspec
+  * Factory-Bot
+  * DotEnv
+  * Octokit
+  * Api-Pagination
+  * Rubocop
 
-* System dependencies
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
