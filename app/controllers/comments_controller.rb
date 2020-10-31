@@ -13,7 +13,7 @@ class CommentsController < ApplicationController
     render json: @comment, status: :created
   rescue ActiveRecord::RecordNotFound
     authorization_error
-  rescue StandardError
+  rescue ActiveRecord::RecordInvalid
     render json: @comment, status: :unprocessable_entity, error: true
   end
 

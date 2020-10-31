@@ -24,7 +24,7 @@ class ArticlesController < ApplicationController
     render json: article, status: :ok
   rescue ActiveRecord::RecordNotFound
     authorization_error
-  rescue StandardError
+  rescue ActiveRecord::RecordInvalid
     render json: article, status: :unprocessable_entity, error: true
   end
 
