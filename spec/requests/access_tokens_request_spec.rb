@@ -4,9 +4,9 @@ RSpec.describe 'AccessTokens', type: :request do
   describe '#create' do
     let(:create) { '/login' }
 
-    context 'when no code provided' do
+    context 'when no oauth_data provided' do
       subject { post create }
-      it_behaves_like 'unauthorized_requests'
+      it_behaves_like 'unauthorized_standard_requests'
     end
 
     context 'when invalid code provided' do
@@ -18,7 +18,7 @@ RSpec.describe 'AccessTokens', type: :request do
 
       subject { post create, params: { code: 'invalid_code' } }
 
-      it_behaves_like 'unauthorized_requests'
+      it_behaves_like 'unauthorized_oauth_requests'
     end
 
     context 'when success request' do

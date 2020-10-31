@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 require 'rails_helper'
 
-describe UserAuthenticator do
+describe UserAuthenticator::Oauth do
   describe '#perform' do
     let(:authenticator) { described_class.new('sample_code') }
     subject { authenticator.perform }
@@ -22,10 +20,10 @@ describe UserAuthenticator do
     context 'when code is correct' do
       let(:user_data) do
         {
-          login: 'JDoo1',
-          url: 'http://example.com',
-          avatar_url: 'http://example.com/avatar',
-          name: 'John Doo'
+            login: 'JDoo1',
+            url: 'http://example.com',
+            avatar_url: 'http://example.com/avatar',
+            name: 'John Doo'
         }
       end
 
@@ -44,11 +42,6 @@ describe UserAuthenticator do
         user = create :user, user_data
         expect { subject }.not_to change { User.count }
         expect(authenticator.user).to eq(user)
-      end
-
-      it "should create and set user's access token" do
-        expect { subject }.to change { AccessToken.count }.by(1)
-        expect(authenticator.access_token).to be_present
       end
     end
   end
